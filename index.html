@@ -101,7 +101,7 @@
         .warehouse-cell {
             background-color: #f9fafb;
             min-height: 50px;
-            min-width: 80px;
+            min-width: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -438,14 +438,12 @@
                 const dataRows = document.querySelectorAll('.data-row');
                 dataRows.forEach(row => {
                     row.addEventListener('click', (e) => {
-                        // Prevent event from firing twice if checkbox is clicked directly
                         if (e.target.matches('.data-row-checkbox')) {
                             return;
                         }
                         const checkbox = row.querySelector('.data-row-checkbox');
                         if (checkbox) {
                             checkbox.checked = !checkbox.checked;
-                            // Manually trigger change event to update styles and select-all state
                             checkbox.dispatchEvent(new Event('change'));
                         }
                     });
@@ -456,6 +454,7 @@
             // --- WAREHOUSE VIEW DRAG-AND-DROP LOGIC ---
             const warehouseSelect = document.getElementById('warehouse-select');
             const warehouseGrid = document.getElementById('warehouse-grid');
+            const locationCargoInput = document.getElementById('location-cargo-input');
             let isDragging = false;
 
             const warehouseLayouts = {
@@ -480,7 +479,7 @@
                     if (layout.occupied.includes(i + 1)) {
                         cell.classList.add('occupied');
                     }
-                    cell.textContent = `C-${i + 1}`;
+                    cell.textContent = `WH${selectedWarehouse}-C-${i + 1}`;
                     cell.dataset.cellId = i + 1;
 
                     cell.addEventListener('mousedown', (e) => {
@@ -501,7 +500,21 @@
             };
             
             document.addEventListener('mouseup', () => {
-                isDragging = false;
+                if (isDragging) {
+                    isDragging = false;
+                    const selectedCells = warehouseGrid.querySelectorAll('.warehouse-cell.selected-by-drag');
+                    const selectedCellNames = Array.from(selectedCells)
+                        .map(cell => cell.textContent)
+                        .sort((a, b) => {
+                            const numA = parseInt(a.split('-')[2]);
+                            const numB = parseInt(b.split('-')[2]);
+                            return numA - numB;
+                        });
+
+                    if (locationCargoInput) {
+                        locationCargoInput.value = selectedCellNames.join(', ');
+                    }
+                }
             });
 
             warehouseSelect.addEventListener('change', renderWarehouseGrid);
@@ -524,7 +537,7 @@
 
                 const planLocText = Array.from(selectedWarehouseCells)
                     .map(cell => cell.textContent)
-                    .sort((a, b) => parseInt(a.split('-')[1]) - parseInt(b.split('-')[1]))
+                    .sort((a, b) => parseInt(a.split('-')[2]) - parseInt(b.split('-')[2]))
                     .join(', ');
 
                 selectedDataRows.forEach(checkbox => {
