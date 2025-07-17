@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space/Movement Request Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .form-input, .form-select {
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px #3b82f6;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #4b5563;
+            white-space: nowrap;
+        }
+        .section-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            background-color: #ffffff;
+            position: relative;
+        }
+        .section-title {
+            position: absolute;
+            top: -0.875rem;
+            left: 1rem;
+            background-color: #ffffff;
+            padding: 0 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        .input-group-append {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.75rem;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-left: 0;
+            border-radius: 0 0.375rem 0.375rem 0;
+        }
+        .data-row.selected {
+            background-color: #bfdbfe;
+        }
+        .warehouse-grid {
+            display: grid;
+            gap: 1px;
+            background-color: #d1d5db;
+            border: 1px solid #d1d5db;
+            overflow-x: auto;
+            padding: 1px;
+            user-select: none; /* Prevent text selection during drag */
+        }
+        .warehouse-cell {
+            background-color: #f9fafb;
+            min-height: 50px;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+            border: 1px solid transparent;
+        }
+        .warehouse-cell.occupied {
+            background-color: #fdba74; /* Orange-300 */
+        }
+        .warehouse-cell.selected-by-drag {
+            background-color: #93c5fd; /* A light blue for selection */
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-screen-2xl mx-auto bg-white rounded-lg shadow-lg">
+        <!-- Header -->
+        <header class="bg-blue-600 text-white p-4 flex justify-between items-center rounded-t-lg">
+            <h1 class="text-xl font-bold">Space/Movement Request Detail</h1>
+            <div class="flex items-center space-x-2">
+                <button class="btn bg-blue-500 hover:bg-blue-700 text-white w-auto">
+                    <i class="fas fa-save mr-2"></i> Save
+                </button>
+                <button class="btn bg-gray-200 hover:bg-gray-300 text-gray-800 w-auto">
+                    <i class="fas fa-times mr-2"></i> Close
+                </button>
+            </div>
+        </header>
+
+        <main class="p-4 md:p-6">
+            <!-- Request Info Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <label for="request-no" class="form-label lg:col-span-1">Request No:</label>
+                <div class="lg:col-span-2">
+                    <input type="text" id="request-no" class="form-input" value="REQ25020001">
+                </div>
+
+                <label for="requester-id" class="form-label lg:col-span-1 lg:text-right">Requester:</label>
+                <div class="lg:col-span-3 flex">
+                    <input type="text" id="requester-id" class="form-input rounded-r-none" value="TSBDBADMIN">
+                    <button class="input-group-append hover:bg-gray-200">
+                        <i class="fas fa-search text-gray-600"></i>
+                    </button>
+                    <input type="text" id="requester-name" class="form-input ml-2" value="TSBDBADMIN" readonly>
+                </div>
+                
+                <label for="request-type" class="form-label lg:col-span-1 lg:text-right">Request Type:</label>
+                <div class="lg:col-span-1">
+                    <select id="request-type" class="form-select">
+                        <option selected>Space</option>
+                        <option>Movement</option>
+                    </select>
+                </div>
+
+                <label for="status" class="form-label lg:col-span-1 lg:text-right">Status:</label>
+                <div class="lg:col-span-1">
+                    <input type="text" id="status" class="form-input" value="Planned" readonly>
+                </div>
+                
+                <div class="lg:col-span-1">
+                    <button class="btn btn-primary w-full">Submit</button>
+                </div>
+            </div>
+
+            <!-- Vessel/Cargo Section -->
+            <div class="section-container">
+                <h2 class="section-title">Vessel/Cargo</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-4">
+                     <div class="lg:col-span-3 flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="non-jpvc" name="vessel-type" class="form-radio h-4 w-4 text-blue-600">
+                            <label for="non-jpvc" class="ml-2 form-label">Non-JPVC</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="jpvc" name="vessel-type" class="form-radio h-4 w-4 text-blue-600" checked>
+                            <label for="jpvc" class="ml-2 form-label">JPVC</label>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-3 flex">
+                        <input type="text" id="jpvc-id" class="form-input rounded-r-none" value="24NPST-V01">
+                        <button class="input-group-append hover:bg-gray-200">
+                            <i class="fas fa-search text-gray-600"></i>
+                        </button>
+                    </div>
+                    <label for="sn-select" class="form-label lg:col-span-1 self-center lg:text-right">S/N:</label>
+                    <div class="lg:col-span-2">
+                        <select id="sn-select" class="form-select"><option>Select</option></select>
+                    </div>
+                    <label for="gr-select" class="form-label lg:col-span-1 self-center lg:text-right">GR:</label>
+                    <div class="lg:col-span-2">
+                        <select id="gr-select" class="form-select"><option>Select</option></select>
+                    </div>
+                    <label for="category" class="form-label lg:col-span-1 self-center">Category:</label>
+                    <div class="lg:col-span-2">
+                        <input type="text" id="category" class="form-input" value="I">
+                    </div>
+                    <label for="bl-np01" class="form-label lg:col-span-1 self-center lg:text-right">B/L:</label>
+                    <div class="lg:col-span-2">
+                         <select id="bl-np01" class="form-select"><option selected>NP01</option></select>
+                    </div>
+                    <div class="lg:col-span-6"></div>
+                    <label for="cargo-type" class="form-label lg:col-span-1 self-center">Cargo Type:</label>
+                    <div class="lg:col-span-2">
+                        <input type="text" id="cargo-type" class="form-input" value="Break Bulk Cargo">
+                    </div>
+                    <label for="package-type" class="form-label lg:col-span-1 self-center lg:text-right">Package Type:</label>
+                    <div class="lg:col-span-2">
+                        <input type="text" id="package-type" class="form-input" value="BAGGED GOODS IN GENERAL">
+                    </div>
+                    <label for="dg" class="form-label lg:col-span-1 self-center lg:text-right">DG:</label>
+                    <div class="lg:col-span-2">
+                        <select id="dg" class="form-select"><option>N</option><option>Y</option></select>
+                    </div>
+                    <div class="lg:col-span-3"></div>
+                    <label for="mt" class="form-label lg:col-span-1 self-center">MT:</label>
+                    <div class="lg:col-span-2"><input type="text" id="mt" class="form-input"></div>
+                    <label for="m3" class="form-label lg:col-span-1 self-center lg:text-right">M3:</label>
+                    <div class="lg:col-span-2"><input type="text" id="m3" class="form-input"></div>
+                    <label for="qty" class="form-label lg:col-span-1 self-center lg:text-right">Qty:</label>
+                    <div class="lg:col-span-2"><input type="text" id="qty" class="form-input"></div>
+                     <div class="lg:col-span-3"></div>
+                    <label for="shipper" class="form-label lg:col-span-2 self-center">Shipper/Consignee:</label>
+                    <div class="lg:col-span-10">
+                        <input type="text" id="shipper" class="form-input" value="MEKONG FOOD CORP/PADIBERAS NASIONAL BERHAD (BERNAS)">
+                    </div>
+                    <label for="location-cargo-input" class="form-label lg:col-span-2 self-center">Location:</label>
+                    <div class="lg:col-span-3 flex">
+                        <input type="text" id="location-cargo-input" class="form-input rounded-r-none" value="Cell">
+                        <button class="input-group-append hover:bg-gray-200">
+                            <i class="fas fa-search text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Area Section -->
+            <div class="section-container">
+                <h2 class="section-title">Area</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-6 gap-y-4 items-start">
+                    <!-- Form fields -->
+                    <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-10 gap-x-6 gap-y-4 items-start">
+                         <label for="location-area-id" class="form-label md:col-span-1 self-center">Location:</label>
+                        <div class="md:col-span-3 flex self-center">
+                            <input type="text" id="location-area-id" class="form-input rounded-r-none" value="CLOSED SHED 782">
+                            <button class="input-group-append hover:bg-gray-200"><i class="fas fa-search text-gray-600"></i></button>
+                            <input type="text" id="location-area-cell" class="form-input ml-2" value="Cell">
+                        </div>
+
+                        <label for="est-arrival" class="form-label md:col-span-2 text-right self-center">Est. Arrival Date:</label>
+                        <div class="md:col-span-2 flex self-center">
+                            <input type="text" id="est-arrival" class="form-input rounded-r-none" value="17/07/2025 14:00">
+                            <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
+                        </div>
+
+                        <label for="period" class="form-label md:col-span-1 text-right self-center">Period:</label>
+                        <div class="md:col-span-1 flex items-center self-center">
+                            <input type="text" id="period" class="form-input" value="10">
+                            <span class="ml-2">Days</span>
+                        </div>
+
+                        <label for="area-size" class="form-label md:col-span-1 self-center">Area size:</label>
+                        <div class="md:col-span-1 flex items-center self-center">
+                            <input type="text" id="area-size" class="form-input">
+                            <span class="ml-2">M2</span>
+                        </div>
+                        <div class="md:col-span-2"></div>
+
+                        <label for="est-delivery" class="form-label md:col-span-2 text-right self-center">Est. Delivery Date:</label>
+                        <div class="md:col-span-2 flex self-center">
+                            <input type="text" id="est-delivery" class="form-input rounded-r-none" value="27/07/2025 14:00">
+                            <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
+                        </div>
+                        <div class="md:col-span-3"></div>
+
+                        <label for="area-mt" class="form-label md:col-span-1 self-center">MT:</label>
+                        <div class="md:col-span-1 flex items-center self-center">
+                            <input type="text" id="area-mt" class="form-input" value="1850">
+                        </div>
+                        <div class="md:col-span-2"></div>
+
+                        <label for="remark" class="form-label md:col-span-2 text-right self-center">Remark:</label>
+                        <div class="md:col-span-3 self-center"><input type="text" id="remark" class="form-input"></div>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="lg:col-span-2 flex flex-col space-y-2">
+                        <button id="add-button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Add</button>
+                        <button class="btn bg-red-500 text-white hover:bg-red-600"><i class="fas fa-minus mr-2"></i> Remove</button>
+                        <button class="btn btn-secondary"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warehouse View Section -->
+            <div class="section-container">
+                <h2 class="section-title">Warehouse View</h2>
+                <div class="flex items-center mb-4">
+                    <label for="warehouse-select" class="form-label mr-4">Warehouse:</label>
+                    <select id="warehouse-select" class="form-select w-64">
+                        <option value="1">Warehouse 1</option>
+                        <option value="2">Warehouse 2</option>
+                        <option value="3">Warehouse 3</option>
+                        <option value="4">Warehouse 4</option>
+                        <option value="5">Warehouse 5</option>
+                    </select>
+                </div>
+                <div id="warehouse-grid" class="warehouse-grid">
+                    <!-- Warehouse cells will be generated here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Request Table -->
+            <div class="mt-6 overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300">
+                     <thead class="bg-gray-50">
+                        <tr>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Request Type</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">CA</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">JPVC</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">BL/SN</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">GR</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">S.Agent</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">F.Agent</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Cng/Shp</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Req. LOC</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Plan LOC</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">M2</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">MT</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Est. Arrival Date</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Period</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Cargo Type</th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">DG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="data-row cursor-pointer hover:bg-gray-100">
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">1</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">Space</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">I</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">24NPST-V01</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">NP01</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">SAIL</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">MEKONG FOOD CORP...</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">CS 782</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">CS 782(A1,2)</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">0</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">1850</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">17/07/2025 14:00</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">10</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">Break Bulk Cargo</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">N</td>
+                        </tr>
+                        <tr class="data-row cursor-pointer hover:bg-gray-100">
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">2</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">Space</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">I</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">24ABCD-V02</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">NP02</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">MAERSK</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">GLOBAL SHIPPING LTD...</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">OPEN YARD 1</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">OY 1(B3)</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">0</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">2500.50</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">18/07/2025 10:00</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">15</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">Container</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">N</td>
+                        </tr>
+                        <tr class="data-row cursor-pointer hover:bg-gray-100">
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">3</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">Movement</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">E</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">24XYZ-V03</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">NP03</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">GR003</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">COSCO</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">AGENTC</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">OCEANIC TRADERS...</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">WAREHOUSE 5</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">WH 5(C1,C2)</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">500</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">422.45</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">19/08/2025 10:57</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">5</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">Break Bulk Cargo</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">Y</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA GRID ROW SELECTION LOGIC ---
+            const tableRows = document.querySelectorAll('.data-row');
+            
+            // Allows toggling selection on multiple rows
+            const handleRowClick = (event) => {
+                const clickedRow = event.currentTarget;
+                clickedRow.classList.toggle('selected');
+            };
+
+            tableRows.forEach(row => {
+                row.addEventListener('click', handleRowClick);
+            });
+
+            // --- WAREHOUSE VIEW DRAG-AND-DROP LOGIC ---
+            const warehouseSelect = document.getElementById('warehouse-select');
+            const warehouseGrid = document.getElementById('warehouse-grid');
+            let isDragging = false;
+
+            const warehouseLayouts = {
+                '1': { rows: 6, cols: 10, occupied: [2, 5, 15, 33, 45, 50] },
+                '2': { rows: 8, cols: 12, occupied: [1, 10, 12, 24, 40, 60, 75, 90] },
+                '3': { rows: 5, cols: 8, occupied: [3, 8, 18, 25, 35] },
+                '4': { rows: 7, cols: 14, occupied: [4, 14, 28, 42, 56, 70, 84, 98] },
+                '5': { rows: 10, cols: 15, occupied: [5, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150] }
+            };
+
+            const renderWarehouseGrid = () => {
+                const selectedWarehouse = warehouseSelect.value;
+                const layout = warehouseLayouts[selectedWarehouse];
+                if (!layout) return;
+
+                warehouseGrid.innerHTML = '';
+                warehouseGrid.style.gridTemplateColumns = `repeat(${layout.cols}, minmax(0, 1fr))`;
+
+                for (let i = 0; i < layout.rows * layout.cols; i++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('warehouse-cell');
+                    if (layout.occupied.includes(i + 1)) {
+                        cell.classList.add('occupied');
+                    }
+                    cell.textContent = `C-${i + 1}`;
+                    cell.dataset.cellId = i + 1;
+
+                    cell.addEventListener('mousedown', (e) => {
+                        isDragging = true;
+                        warehouseGrid.querySelectorAll('.warehouse-cell').forEach(c => c.classList.remove('selected-by-drag'));
+                        cell.classList.add('selected-by-drag');
+                        e.preventDefault();
+                    });
+
+                    cell.addEventListener('mouseover', () => {
+                        if (isDragging) {
+                            cell.classList.add('selected-by-drag');
+                        }
+                    });
+                    
+                    warehouseGrid.appendChild(cell);
+                }
+            };
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            warehouseSelect.addEventListener('change', renderWarehouseGrid);
+            renderWarehouseGrid();
+
+            // --- ADD BUTTON LOGIC ---
+            const addButton = document.getElementById('add-button');
+            addButton.addEventListener('click', () => {
+                const selectedDataRows = document.querySelectorAll('.data-row.selected');
+                const selectedWarehouseCells = document.querySelectorAll('.warehouse-cell.selected-by-drag');
+
+                if (selectedDataRows.length === 0) {
+                    // In a real app, you'd use a modal here instead of an alert.
+                    console.log("Please select at least one row from the data grid.");
+                    return;
+                }
+                if (selectedWarehouseCells.length === 0) {
+                    // In a real app, you'd use a modal here instead of an alert.
+                    console.log("Please select at least one cell from the warehouse view.");
+                    return;
+                }
+
+                const planLocText = Array.from(selectedWarehouseCells)
+                    .map(cell => cell.textContent)
+                    .sort((a, b) => parseInt(a.split('-')[1]) - parseInt(b.split('-')[1]))
+                    .join(', ');
+
+                selectedDataRows.forEach(row => {
+                    const planLocCell = row.cells[10]; // 11th column is Plan LOC
+                    if (planLocCell) {
+                        planLocCell.textContent = planLocText;
+                    }
+                });
+
+                // Clear selections after adding
+                selectedDataRows.forEach(row => row.classList.remove('selected'));
+                selectedWarehouseCells.forEach(cell => cell.classList.remove('selected-by-drag'));
+            });
+        });
+    </script>
+
+</body>
+</html>
