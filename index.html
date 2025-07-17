@@ -321,7 +321,10 @@
                 <table class="min-w-full bg-white border border-gray-300">
                      <thead class="bg-gray-50">
                         <tr>
-                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
+                            <th class="py-2 px-3 border-b text-left">
+                                <input type="checkbox" id="select-all-checkbox">
+                            </th>
+                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Request Type</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">CA</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">JPVC</th>
@@ -340,64 +343,8 @@
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">DG</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="data-row cursor-pointer hover:bg-gray-100">
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">1</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">Space</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">I</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">24NPST-V01</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">NP01</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">SAIL</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">MEKONG FOOD CORP...</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">CS 782</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">CS 782(A1,2)</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">0</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">1850</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">17/07/2025 14:00</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">10</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">Break Bulk Cargo</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">N</td>
-                        </tr>
-                        <tr class="data-row cursor-pointer hover:bg-gray-100">
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">2</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">Space</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">I</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">24ABCD-V02</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">NP02</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">MAERSK</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">GLOBAL SHIPPING LTD...</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">OPEN YARD 1</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">OY 1(B3)</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">0</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">2500.50</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">18/07/2025 10:00</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">15</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">Container</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">N</td>
-                        </tr>
-                        <tr class="data-row cursor-pointer hover:bg-gray-100">
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">3</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">Movement</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">E</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">24XYZ-V03</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">NP03</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">GR003</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">COSCO</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">AGENTC</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">OCEANIC TRADERS...</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">WAREHOUSE 5</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">WH 5(C1,C2)</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">500</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">422.45</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">19/08/2025 10:57</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">5</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">Break Bulk Cargo</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">Y</td>
-                        </tr>
+                    <tbody id="data-grid-body">
+                        <!-- Data rows will be generated by JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -406,18 +353,88 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- DATA GRID ROW SELECTION LOGIC ---
-            const tableRows = document.querySelectorAll('.data-row');
-            
-            // Allows toggling selection on multiple rows
-            const handleRowClick = (event) => {
-                const clickedRow = event.currentTarget;
-                clickedRow.classList.toggle('selected');
-            };
+            const dataGridBody = document.getElementById('data-grid-body');
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
 
-            tableRows.forEach(row => {
-                row.addEventListener('click', handleRowClick);
+            // --- DYNAMIC DATA GENERATION ---
+            const generateData = () => {
+                let tableContent = '';
+                const requestTypes = ['Space', 'Movement'];
+                const caTypes = ['I', 'E'];
+                const agents = ['SAIL', 'MAERSK', 'COSCO', 'MSC', 'CMA CGM'];
+                const shippers = ['MEKONG FOOD CORP...', 'GLOBAL SHIPPING LTD...', 'OCEANIC TRADERS...', 'EASTERN CARGO...', 'PACIFIC LOGISTICS...'];
+                const locations = ['CS 782', 'OPEN YARD 1', 'WAREHOUSE 5', 'SHED 3', 'CFS-1'];
+                const cargoTypes = ['Break Bulk Cargo', 'Container', 'Liquid Bulk', 'Dry Bulk'];
+                const dgTypes = ['N', 'Y'];
+
+                for (let i = 1; i <= 100; i++) {
+                    const reqType = requestTypes[i % 2];
+                    const ca = caTypes[i % 2];
+                    const jpvc = `24${String.fromCharCode(65 + (i % 26))}${String.fromCharCode(65 + ((i+1) % 26))}${String.fromCharCode(65 + ((i+2) % 26))}-V${String(i).padStart(2,'0')}`;
+                    const blsn = `NP${String(i).padStart(2,'0')}`;
+                    const agent = agents[i % agents.length];
+                    const shipper = shippers[i % shippers.length];
+                    const reqLoc = locations[i % locations.length];
+                    const planLoc = `${reqLoc}(${String.fromCharCode(65 + (i % 5))}${i % 3 + 1},${i % 4 + 1})`;
+                    const m2 = (i % 5) * 100;
+                    const mt = (Math.random() * 2000 + 500).toFixed(2);
+                    const date = new Date(2025, 6, 17 + (i%30));
+                    date.setHours(10 + (i%10), 50 + (i%9));
+                    const estArrival = `${date.getDate().toString().padStart(2,'0')}/${(date.getMonth()+1).toString().padStart(2,'0')}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                    const period = 5 + (i % 15);
+                    const cargo = cargoTypes[i % cargoTypes.length];
+                    const dg = dgTypes[i % 2];
+
+                    tableContent += `
+                        <tr class="data-row cursor-pointer hover:bg-gray-100">
+                            <td class="py-2 px-3 border-b">
+                                <input type="checkbox" class="data-row-checkbox">
+                            </td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${i}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${reqType}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${ca}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${jpvc}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${blsn}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${agent}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${shipper}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${reqLoc}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${planLoc}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${m2}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${mt}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${estArrival}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${period}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${cargo}</td>
+                            <td class="py-2 px-3 border-b text-sm text-gray-700">${dg}</td>
+                        </tr>
+                    `;
+                }
+                dataGridBody.innerHTML = tableContent;
+            };
+            
+            generateData();
+
+            // --- CHECKBOX SELECTION LOGIC ---
+            const allCheckboxes = document.querySelectorAll('.data-row-checkbox');
+            
+            selectAllCheckbox.addEventListener('change', (e) => {
+                allCheckboxes.forEach(checkbox => {
+                    checkbox.checked = e.target.checked;
+                    checkbox.closest('tr').classList.toggle('selected', e.target.checked);
+                });
             });
+
+            allCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    e.target.closest('tr').classList.toggle('selected', e.target.checked);
+                    // Uncheck "select all" if any individual checkbox is unchecked
+                    if (!e.target.checked) {
+                        selectAllCheckbox.checked = false;
+                    }
+                });
+            });
+
 
             // --- WAREHOUSE VIEW DRAG-AND-DROP LOGIC ---
             const warehouseSelect = document.getElementById('warehouse-select');
@@ -476,16 +493,14 @@
             // --- ADD BUTTON LOGIC ---
             const addButton = document.getElementById('add-button');
             addButton.addEventListener('click', () => {
-                const selectedDataRows = document.querySelectorAll('.data-row.selected');
+                const selectedDataRows = document.querySelectorAll('.data-row-checkbox:checked');
                 const selectedWarehouseCells = document.querySelectorAll('.warehouse-cell.selected-by-drag');
 
                 if (selectedDataRows.length === 0) {
-                    // In a real app, you'd use a modal here instead of an alert.
                     console.log("Please select at least one row from the data grid.");
                     return;
                 }
                 if (selectedWarehouseCells.length === 0) {
-                    // In a real app, you'd use a modal here instead of an alert.
                     console.log("Please select at least one cell from the warehouse view.");
                     return;
                 }
@@ -495,15 +510,20 @@
                     .sort((a, b) => parseInt(a.split('-')[1]) - parseInt(b.split('-')[1]))
                     .join(', ');
 
-                selectedDataRows.forEach(row => {
-                    const planLocCell = row.cells[10]; // 11th column is Plan LOC
+                selectedDataRows.forEach(checkbox => {
+                    const row = checkbox.closest('tr');
+                    const planLocCell = row.cells[11]; // 12th column is Plan LOC
                     if (planLocCell) {
                         planLocCell.textContent = planLocText;
                     }
                 });
 
                 // Clear selections after adding
-                selectedDataRows.forEach(row => row.classList.remove('selected'));
+                selectedDataRows.forEach(checkbox => {
+                    checkbox.checked = false;
+                    checkbox.closest('tr').classList.remove('selected');
+                });
+                selectAllCheckbox.checked = false;
                 selectedWarehouseCells.forEach(cell => cell.classList.remove('selected-by-drag'));
             });
         });
