@@ -245,48 +245,45 @@
                 <h2 class="section-title">Area</h2>
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-6 gap-y-4 items-start">
                     <!-- Form fields -->
-                    <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-10 gap-x-6 gap-y-4 items-start">
-                         <label for="location-area-id" class="form-label md:col-span-1 self-center">Location:</label>
-                        <div class="md:col-span-3 flex self-center">
+                    <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-10 gap-x-6 gap-y-4 items-center">
+                         <label for="location-area-id" class="form-label md:col-span-1">Location:</label>
+                        <div class="md:col-span-3 flex">
                             <input type="text" id="location-area-id" class="form-input rounded-r-none" value="CLOSED SHED 782">
                             <button class="input-group-append hover:bg-gray-200"><i class="fas fa-search text-gray-600"></i></button>
                             <input type="text" id="location-area-cell" class="form-input ml-2" value="Cell">
                         </div>
 
-                        <label for="est-arrival" class="form-label md:col-span-2 text-right self-center">Est. Arrival Date:</label>
-                        <div class="md:col-span-2 flex self-center">
+                        <label for="est-arrival" class="form-label md:col-span-2 text-right">Est. Arrival Date:</label>
+                        <div class="md:col-span-4 flex">
                             <input type="text" id="est-arrival" class="form-input rounded-r-none" value="17/07/2025 14:00">
                             <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
                         </div>
 
-                        <label for="period" class="form-label md:col-span-1 text-right self-center">Period:</label>
-                        <div class="md:col-span-1 flex items-center self-center">
-                            <input type="text" id="period" class="form-input" value="10">
-                            <span class="ml-2">Days</span>
-                        </div>
-
-                        <label for="area-size" class="form-label md:col-span-1 self-center">Area size:</label>
-                        <div class="md:col-span-1 flex items-center self-center">
+                        <label for="area-size" class="form-label md:col-span-1">Area size:</label>
+                        <div class="md:col-span-1 flex items-center">
                             <input type="text" id="area-size" class="form-input">
                             <span class="ml-2">M2</span>
                         </div>
-                        <div class="md:col-span-2"></div>
-
-                        <label for="est-delivery" class="form-label md:col-span-2 text-right self-center">Est. Delivery Date:</label>
-                        <div class="md:col-span-2 flex self-center">
+                        <label for="area-mt" class="form-label md:col-span-1 text-right">MT:</label>
+                        <div class="md:col-span-1 flex items-center">
+                            <input type="text" id="area-mt" class="form-input" value="1850">
+                        </div>
+                        
+                        <label for="est-delivery" class="form-label md:col-span-2 text-right">Est. Delivery Date:</label>
+                        <div class="md:col-span-4 flex">
                             <input type="text" id="est-delivery" class="form-input rounded-r-none" value="27/07/2025 14:00">
                             <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
                         </div>
-                        <div class="md:col-span-3"></div>
 
-                        <label for="area-mt" class="form-label md:col-span-1 self-center">MT:</label>
-                        <div class="md:col-span-1 flex items-center self-center">
-                            <input type="text" id="area-mt" class="form-input" value="1850">
+                        <label for="period" class="form-label md:col-span-1">Period:</label>
+                        <div class="md:col-span-1 flex items-center">
+                            <input type="text" id="period" class="form-input" value="10">
+                            <span class="ml-2">Days</span>
                         </div>
-                        <div class="md:col-span-2"></div>
+                        <div class="md:col-span-8"></div>
 
-                        <label for="remark" class="form-label md:col-span-2 text-right self-center">Remark:</label>
-                        <div class="md:col-span-3 self-center"><input type="text" id="remark" class="form-input"></div>
+                        <label for="remark" class="form-label md:col-span-1">Remark:</label>
+                        <div class="md:col-span-9"><input type="text" id="remark" class="form-input"></div>
                     </div>
                     
                     <!-- Buttons -->
@@ -454,7 +451,8 @@
             // --- WAREHOUSE VIEW DRAG-AND-DROP LOGIC ---
             const warehouseSelect = document.getElementById('warehouse-select');
             const warehouseGrid = document.getElementById('warehouse-grid');
-            const locationCargoInput = document.getElementById('location-cargo-input');
+            const locationAreaIdInput = document.getElementById('location-area-id');
+            const locationAreaCellInput = document.getElementById('location-area-cell');
             let isDragging = false;
 
             const warehouseLayouts = {
@@ -504,15 +502,20 @@
                     isDragging = false;
                     const selectedCells = warehouseGrid.querySelectorAll('.warehouse-cell.selected-by-drag');
                     const selectedCellNames = Array.from(selectedCells)
-                        .map(cell => cell.textContent)
+                        .map(cell => cell.textContent.split('-').slice(1).join('-')) // Get C-1, C-2 etc.
                         .sort((a, b) => {
-                            const numA = parseInt(a.split('-')[2]);
-                            const numB = parseInt(b.split('-')[2]);
+                            const numA = parseInt(a.split('-')[1]);
+                            const numB = parseInt(b.split('-')[1]);
                             return numA - numB;
                         });
+                    
+                    const selectedWarehouseName = warehouseSelect.options[warehouseSelect.selectedIndex].text;
 
-                    if (locationCargoInput) {
-                        locationCargoInput.value = selectedCellNames.join(', ');
+                    if (locationAreaIdInput) {
+                        locationAreaIdInput.value = selectedWarehouseName;
+                    }
+                    if (locationAreaCellInput) {
+                        locationAreaCellInput.value = selectedCellNames.join(', ');
                     }
                 }
             });
@@ -537,7 +540,14 @@
 
                 const planLocText = Array.from(selectedWarehouseCells)
                     .map(cell => cell.textContent)
-                    .sort((a, b) => parseInt(a.split('-')[2]) - parseInt(b.split('-')[2]))
+                    .sort((a, b) => {
+                        const whA = parseInt(a.split('-')[0].replace('WH',''));
+                        const cA = parseInt(a.split('-')[2]);
+                        const whB = parseInt(b.split('-')[0].replace('WH',''));
+                        const cB = parseInt(b.split('-')[2]);
+                        if (whA !== whB) return whA - whB;
+                        return cA - cB;
+                    })
                     .join(', ');
 
                 selectedDataRows.forEach(checkbox => {
