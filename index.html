@@ -330,7 +330,6 @@
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">S.Agent</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">F.Agent</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Cng/Shp</th>
-                            <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Req. LOC</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Plan LOC</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">M2</th>
                             <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">MT</th>
@@ -396,7 +395,6 @@
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${agent}</td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700"></td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${shipper}</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">${reqLoc}</td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${planLoc}</td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${m2}</td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${mt}</td>
@@ -552,7 +550,7 @@
 
                 selectedDataRows.forEach(checkbox => {
                     const row = checkbox.closest('tr');
-                    const planLocCell = row.cells[11]; // 12th column is Plan LOC
+                    const planLocCell = row.cells[10]; // 11th column is Plan LOC
                     if (planLocCell) {
                         planLocCell.textContent = planLocText;
                     }
@@ -579,7 +577,7 @@
 
                 selectedDataRows.forEach(checkbox => {
                     const row = checkbox.closest('tr');
-                    const planLocCell = row.cells[11]; // 12th column is Plan LOC
+                    const planLocCell = row.cells[10]; // 11th column is Plan LOC
                     if (planLocCell) {
                         planLocCell.textContent = '';
                     }
