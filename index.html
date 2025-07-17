@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yard Plan</title>
+    <title>Space/Movement Request Detail</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -123,7 +123,7 @@
     <div class="max-w-screen-2xl mx-auto bg-white rounded-lg shadow-lg">
         <!-- Header -->
         <header class="bg-blue-600 text-white p-4 flex justify-between items-center rounded-t-lg">
-            <h1 class="text-xl font-bold">Yard Plan Detail</h1>
+            <h1 class="text-xl font-bold">Space/Movement Request Detail</h1>
             <div class="flex items-center space-x-2">
                 <button class="btn bg-blue-500 hover:bg-blue-700 text-white w-auto">
                     <i class="fas fa-save mr-2"></i> Save
@@ -292,8 +292,8 @@
                     <!-- Buttons -->
                     <div class="lg:col-span-2 flex flex-col space-y-2">
                         <button id="add-button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Add</button>
-                        <button class="btn bg-red-500 text-white hover:bg-red-600"><i class="fas fa-minus mr-2"></i> Remove</button>
-                        <button class="btn btn-secondary"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
+                        <button id="remove-button" class="btn bg-red-500 text-white hover:bg-red-600"><i class="fas fa-minus mr-2"></i> Remove</button>
+                        <button id="refresh-button" class="btn btn-secondary"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
                     </div>
                 </div>
             </div>
@@ -428,7 +428,6 @@
             allCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', (e) => {
                     e.target.closest('tr').classList.toggle('selected', e.target.checked);
-                    // Uncheck "select all" if any individual checkbox is unchecked
                     if (!e.target.checked) {
                         selectAllCheckbox.checked = false;
                     }
@@ -525,6 +524,40 @@
                 });
                 selectAllCheckbox.checked = false;
                 selectedWarehouseCells.forEach(cell => cell.classList.remove('selected-by-drag'));
+            });
+
+            // --- REMOVE BUTTON LOGIC ---
+            const removeButton = document.getElementById('remove-button');
+            removeButton.addEventListener('click', () => {
+                const selectedDataRows = document.querySelectorAll('.data-row-checkbox:checked');
+
+                if (selectedDataRows.length === 0) {
+                    console.log("Please select at least one row to remove Plan LOC data.");
+                    return;
+                }
+
+                selectedDataRows.forEach(checkbox => {
+                    const row = checkbox.closest('tr');
+                    const planLocCell = row.cells[11]; // 12th column is Plan LOC
+                    if (planLocCell) {
+                        planLocCell.textContent = '';
+                    }
+                });
+            });
+
+            // --- REFRESH BUTTON LOGIC ---
+            const refreshButton = document.getElementById('refresh-button');
+            refreshButton.addEventListener('click', () => {
+                const areaInputIds = [
+                    'location-area-id', 'location-area-cell', 'est-arrival',
+                    'period', 'area-size', 'est-delivery', 'area-mt', 'remark'
+                ];
+                areaInputIds.forEach(id => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        input.value = '';
+                    }
+                });
             });
         });
     </script>
