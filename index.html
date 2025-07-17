@@ -31,7 +31,7 @@
             white-space: nowrap;
         }
         .section-container {
-            border: 1px solid #e5e7eb;
+            border: 1px solid #9ca3af; /* Made border darker */
             border-radius: 0.5rem;
             padding: 1.5rem;
             margin-top: 2rem;
@@ -44,7 +44,7 @@
             left: 1rem;
             background-color: #ffffff;
             padding: 0 0.5rem;
-            font-weight: 600;
+            font-weight: 700; /* Made title bold */
             color: #374151;
         }
         .btn {
@@ -414,25 +414,43 @@
             };
             
             generateData();
+            addEventListenersToRows();
 
-            // --- CHECKBOX SELECTION LOGIC ---
-            const allCheckboxes = document.querySelectorAll('.data-row-checkbox');
-            
-            selectAllCheckbox.addEventListener('change', (e) => {
+            // --- ADD EVENT LISTENERS FUNCTION ---
+            function addEventListenersToRows() {
+                const allCheckboxes = document.querySelectorAll('.data-row-checkbox');
+                selectAllCheckbox.addEventListener('change', (e) => {
+                    allCheckboxes.forEach(checkbox => {
+                        checkbox.checked = e.target.checked;
+                        checkbox.closest('tr').classList.toggle('selected', e.target.checked);
+                    });
+                });
+
                 allCheckboxes.forEach(checkbox => {
-                    checkbox.checked = e.target.checked;
-                    checkbox.closest('tr').classList.toggle('selected', e.target.checked);
+                    checkbox.addEventListener('change', (e) => {
+                        e.target.closest('tr').classList.toggle('selected', e.target.checked);
+                        if (!e.target.checked) {
+                            selectAllCheckbox.checked = false;
+                        }
+                    });
                 });
-            });
 
-            allCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', (e) => {
-                    e.target.closest('tr').classList.toggle('selected', e.target.checked);
-                    if (!e.target.checked) {
-                        selectAllCheckbox.checked = false;
-                    }
+                const dataRows = document.querySelectorAll('.data-row');
+                dataRows.forEach(row => {
+                    row.addEventListener('click', (e) => {
+                        // Prevent event from firing twice if checkbox is clicked directly
+                        if (e.target.matches('.data-row-checkbox')) {
+                            return;
+                        }
+                        const checkbox = row.querySelector('.data-row-checkbox');
+                        if (checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                            // Manually trigger change event to update styles and select-all state
+                            checkbox.dispatchEvent(new Event('change'));
+                        }
+                    });
                 });
-            });
+            }
 
 
             // --- WAREHOUSE VIEW DRAG-AND-DROP LOGIC ---
