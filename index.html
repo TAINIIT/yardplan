@@ -34,7 +34,6 @@
             border: 5px solid #3b82f6; /* Made border thicker and blue */
             border-radius: 0.5rem;
             padding: 1.5rem;
-            margin-top: 2rem;
             background-color: #ffffff;
             position: relative;
         }
@@ -91,30 +90,30 @@
         }
         .warehouse-grid {
             display: grid;
-            gap: 1px;
+            gap: 2px;
             background-color: #d1d5db;
             border: 1px solid #d1d5db;
-            overflow-x: auto;
-            padding: 1px;
+            overflow: auto;
+            padding: 2px;
             user-select: none; /* Prevent text selection during drag */
         }
         .warehouse-cell {
             background-color: #f9fafb;
-            min-height: 50px;
-            min-width: 100px;
+            min-height: 80px; /* Increased height */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            color: #6b7280;
-            border: 1px solid transparent;
-        }
-        .warehouse-cell.occupied {
-            background-color: #fdba74; /* Orange-300 */
+            font-size: 1rem; /* Increased font size */
+            color: #374151; /* Darkened text color */
+            font-weight: 600; /* Bolder font */
+            border: 2px solid transparent;
+            text-align: center;
+            word-break: break-all; /* Force word break */
+            padding: 4px;
         }
         .warehouse-cell.selected-by-drag {
             background-color: #93c5fd; /* A light blue for selection */
-            border-color: #3b82f6;
+            border-color: #2563eb;
         }
     </style>
 </head>
@@ -136,7 +135,7 @@
 
         <main class="p-4 md:p-6">
             <!-- Request Info Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center mb-4">
                 <label for="request-no" class="form-label lg:col-span-1">Request No:</label>
                 <div class="lg:col-span-2">
                     <input type="text" id="request-no" class="form-input" value="REQ25020001">
@@ -169,147 +168,166 @@
                 </div>
             </div>
 
-            <!-- Vessel/Cargo Section -->
-            <div class="section-container">
-                <h2 class="section-title">Vessel/Cargo</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-4">
-                     <div class="lg:col-span-3 flex items-center space-x-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="non-jpvc" name="vessel-type" class="form-radio h-4 w-4 text-blue-600">
-                            <label for="non-jpvc" class="ml-2 form-label">Non-JPVC</label>
+            <div class="flex flex-col lg:flex-row lg:space-x-6">
+                <!-- Left Column -->
+                <div class="lg:w-1/2 flex flex-col space-y-6">
+                    <!-- Vessel/Cargo Section -->
+                    <div class="section-container">
+                        <h2 class="section-title">Vessel/Cargo</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                            <div class="md:col-span-2 grid grid-cols-2 gap-x-6">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center">
+                                        <input type="radio" id="non-jpvc" name="vessel-type" class="form-radio h-4 w-4 text-blue-600">
+                                        <label for="non-jpvc" class="ml-2 form-label">Non-JPVC</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="radio" id="jpvc" name="vessel-type" class="form-radio h-4 w-4 text-blue-600" checked>
+                                        <label for="jpvc" class="ml-2 form-label">JPVC</label>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <input type="text" id="jpvc-id" class="form-input rounded-r-none" value="24NPST-V01">
+                                    <button class="input-group-append hover:bg-gray-200">
+                                        <i class="fas fa-search text-gray-600"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="sn-select" class="form-label">S/N:</label>
+                                <select id="sn-select" class="form-select"><option>Select</option></select>
+                            </div>
+                            <div>
+                                <label for="gr-select" class="form-label">GR:</label>
+                                <select id="gr-select" class="form-select"><option>Select</option></select>
+                            </div>
+                            <div>
+                                <label for="category" class="form-label">Category:</label>
+                                <input type="text" id="category" class="form-input" value="I">
+                            </div>
+                            <div>
+                                <label for="bl-np01" class="form-label">B/L:</label>
+                                <select id="bl-np01" class="form-select"><option selected>NP01</option></select>
+                            </div>
+                            <div>
+                                <label for="cargo-type" class="form-label">Cargo Type:</label>
+                                <input type="text" id="cargo-type" class="form-input" value="Break Bulk Cargo">
+                            </div>
+                            <div>
+                                <label for="package-type" class="form-label">Package Type:</label>
+                                <input type="text" id="package-type" class="form-input" value="BAGGED GOODS IN GENERAL">
+                            </div>
+                             <div>
+                                <label for="dg" class="form-label">DG:</label>
+                                <select id="dg" class="form-select"><option>N</option><option>Y</option></select>
+                            </div>
+                            <div>
+                                <label for="mt" class="form-label">MT:</label>
+                                <input type="text" id="mt" class="form-input">
+                            </div>
+                             <div>
+                                <label for="m3" class="form-label">M3:</label>
+                                <input type="text" id="m3" class="form-input">
+                            </div>
+                            <div>
+                                <label for="qty" class="form-label">Qty:</label>
+                                <input type="text" id="qty" class="form-input">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="shipper" class="form-label">Shipper/Consignee:</label>
+                                <input type="text" id="shipper" class="form-input" value="MEKONG FOOD CORP/PADIBERAS NASIONAL BERHAD (BERNAS)">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="location-cargo-input" class="form-label">Location:</label>
+                                <div class="flex">
+                                    <input type="text" id="location-cargo-input" class="form-input rounded-r-none" value="Cell">
+                                    <button class="input-group-append hover:bg-gray-200">
+                                        <i class="fas fa-search text-gray-600"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="jpvc" name="vessel-type" class="form-radio h-4 w-4 text-blue-600" checked>
-                            <label for="jpvc" class="ml-2 form-label">JPVC</label>
+                    </div>
+
+                    <!-- Area Section -->
+                    <div class="section-container">
+                        <h2 class="section-title">Area</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-4 items-start">
+                            <div class="md:col-span-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                                <div class="sm:col-span-2">
+                                    <label for="location-area-id" class="form-label">Location:</label>
+                                    <div class="flex">
+                                        <input type="text" id="location-area-id" class="form-input rounded-r-none" value="CLOSED SHED 782">
+                                        <button class="input-group-append hover:bg-gray-200"><i class="fas fa-search text-gray-600"></i></button>
+                                        <input type="text" id="location-area-cell" class="form-input ml-2" value="Cell">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="est-arrival" class="form-label">Est. Arrival Date:</label>
+                                    <div class="flex">
+                                        <input type="text" id="est-arrival" class="form-input rounded-r-none" value="17/07/2025 14:00">
+                                        <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
+                                    </div>
+                                </div>
+                                 <div>
+                                    <label for="est-delivery" class="form-label">Est. Delivery Date:</label>
+                                    <div class="flex">
+                                        <input type="text" id="est-delivery" class="form-input rounded-r-none" value="27/07/2025 14:00">
+                                        <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-x-6">
+                                    <div>
+                                        <label for="area-size" class="form-label">Area size:</label>
+                                        <div class="flex items-center">
+                                            <input type="text" id="area-size" class="form-input">
+                                            <span class="ml-2">M2</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="area-mt" class="form-label">MT:</label>
+                                        <input type="text" id="area-mt" class="form-input" value="1850">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="period" class="form-label">Period:</label>
+                                    <div class="flex items-center">
+                                        <input type="text" id="period" class="form-input" value="10">
+                                        <span class="ml-2">Days</span>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label for="remark" class="form-label">Remark:</label>
+                                    <input type="text" id="remark" class="form-input">
+                                </div>
+                            </div>
+                            <div class="md:col-span-2 flex flex-col space-y-2">
+                                <button id="add-button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Add</button>
+                                <button id="remove-button" class="btn bg-red-500 text-white hover:bg-red-600"><i class="fas fa-minus mr-2"></i> Remove</button>
+                                <button id="refresh-button" class="btn btn-secondary"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="lg:col-span-3 flex">
-                        <input type="text" id="jpvc-id" class="form-input rounded-r-none" value="24NPST-V01">
-                        <button class="input-group-append hover:bg-gray-200">
-                            <i class="fas fa-search text-gray-600"></i>
-                        </button>
-                    </div>
-                    <label for="sn-select" class="form-label lg:col-span-1 self-center lg:text-right">S/N:</label>
-                    <div class="lg:col-span-2">
-                        <select id="sn-select" class="form-select"><option>Select</option></select>
-                    </div>
-                    <label for="gr-select" class="form-label lg:col-span-1 self-center lg:text-right">GR:</label>
-                    <div class="lg:col-span-2">
-                        <select id="gr-select" class="form-select"><option>Select</option></select>
-                    </div>
-                    <label for="category" class="form-label lg:col-span-1 self-center">Category:</label>
-                    <div class="lg:col-span-2">
-                        <input type="text" id="category" class="form-input" value="I">
-                    </div>
-                    <label for="bl-np01" class="form-label lg:col-span-1 self-center lg:text-right">B/L:</label>
-                    <div class="lg:col-span-2">
-                         <select id="bl-np01" class="form-select"><option selected>NP01</option></select>
-                    </div>
-                    <div class="lg:col-span-6"></div>
-                    <label for="cargo-type" class="form-label lg:col-span-1 self-center">Cargo Type:</label>
-                    <div class="lg:col-span-2">
-                        <input type="text" id="cargo-type" class="form-input" value="Break Bulk Cargo">
-                    </div>
-                    <label for="package-type" class="form-label lg:col-span-1 self-center lg:text-right">Package Type:</label>
-                    <div class="lg:col-span-2">
-                        <input type="text" id="package-type" class="form-input" value="BAGGED GOODS IN GENERAL">
-                    </div>
-                    <label for="dg" class="form-label lg:col-span-1 self-center lg:text-right">DG:</label>
-                    <div class="lg:col-span-2">
-                        <select id="dg" class="form-select"><option>N</option><option>Y</option></select>
-                    </div>
-                    <div class="lg:col-span-3"></div>
-                    <label for="mt" class="form-label lg:col-span-1 self-center">MT:</label>
-                    <div class="lg:col-span-2"><input type="text" id="mt" class="form-input"></div>
-                    <label for="m3" class="form-label lg:col-span-1 self-center lg:text-right">M3:</label>
-                    <div class="lg:col-span-2"><input type="text" id="m3" class="form-input"></div>
-                    <label for="qty" class="form-label lg:col-span-1 self-center lg:text-right">Qty:</label>
-                    <div class="lg:col-span-2"><input type="text" id="qty" class="form-input"></div>
-                     <div class="lg:col-span-3"></div>
-                    <label for="shipper" class="form-label lg:col-span-2 self-center">Shipper/Consignee:</label>
-                    <div class="lg:col-span-10">
-                        <input type="text" id="shipper" class="form-input" value="MEKONG FOOD CORP/PADIBERAS NASIONAL BERHAD (BERNAS)">
-                    </div>
-                    <label for="location-cargo-input" class="form-label lg:col-span-2 self-center">Location:</label>
-                    <div class="lg:col-span-3 flex">
-                        <input type="text" id="location-cargo-input" class="form-input rounded-r-none" value="Cell">
-                        <button class="input-group-append hover:bg-gray-200">
-                            <i class="fas fa-search text-gray-600"></i>
-                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Area Section -->
-            <div class="section-container">
-                <h2 class="section-title">Area</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-6 gap-y-4 items-start">
-                    <!-- Form fields -->
-                    <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-10 gap-x-6 gap-y-4 items-center">
-                         <label for="location-area-id" class="form-label md:col-span-1">Location:</label>
-                        <div class="md:col-span-3 flex">
-                            <input type="text" id="location-area-id" class="form-input rounded-r-none" value="CLOSED SHED 782">
-                            <button class="input-group-append hover:bg-gray-200"><i class="fas fa-search text-gray-600"></i></button>
-                            <input type="text" id="location-area-cell" class="form-input ml-2" value="Cell">
+                <!-- Right Column -->
+                <div class="lg:w-1/2 flex flex-col">
+                    <div class="section-container flex-grow flex flex-col">
+                        <h2 class="section-title">Warehouse View</h2>
+                        <div class="flex items-center mb-4">
+                            <label for="warehouse-select" class="form-label mr-4">Warehouse:</label>
+                            <select id="warehouse-select" class="form-select w-64">
+                                <option value="1">Warehouse 1</option>
+                                <option value="2">Warehouse 2</option>
+                                <option value="3">Warehouse 3</option>
+                                <option value="4">Warehouse 4</option>
+                                <option value="5">Warehouse 5</option>
+                            </select>
                         </div>
-
-                        <label for="est-arrival" class="form-label md:col-span-2 text-right">Est. Arrival Date:</label>
-                        <div class="md:col-span-4 flex">
-                            <input type="text" id="est-arrival" class="form-input rounded-r-none" value="17/07/2025 14:00">
-                            <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
+                        <div id="warehouse-grid" class="warehouse-grid flex-grow">
+                            <!-- Warehouse cells will be generated here by JavaScript -->
                         </div>
-
-                        <label for="area-size" class="form-label md:col-span-1">Area size:</label>
-                        <div class="md:col-span-1 flex items-center">
-                            <input type="text" id="area-size" class="form-input">
-                            <span class="ml-2">M2</span>
-                        </div>
-                        <label for="area-mt" class="form-label md:col-span-1 text-right">MT:</label>
-                        <div class="md:col-span-1 flex items-center">
-                            <input type="text" id="area-mt" class="form-input" value="1850">
-                        </div>
-                        
-                        <label for="est-delivery" class="form-label md:col-span-2 text-right">Est. Delivery Date:</label>
-                        <div class="md:col-span-4 flex">
-                            <input type="text" id="est-delivery" class="form-input rounded-r-none" value="27/07/2025 14:00">
-                            <span class="input-group-append"><i class="fas fa-calendar-alt text-gray-600"></i></span>
-                        </div>
-
-                        <label for="period" class="form-label md:col-span-1">Period:</label>
-                        <div class="md:col-span-1 flex items-center">
-                            <input type="text" id="period" class="form-input" value="10">
-                            <span class="ml-2">Days</span>
-                        </div>
-                        <div class="md:col-span-8"></div>
-
-                        <label for="remark" class="form-label md:col-span-1">Remark:</label>
-                        <div class="md:col-span-9"><input type="text" id="remark" class="form-input"></div>
                     </div>
-                    
-                    <!-- Buttons -->
-                    <div class="lg:col-span-2 flex flex-col space-y-2">
-                        <button id="add-button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Add</button>
-                        <button id="remove-button" class="btn bg-red-500 text-white hover:bg-red-600"><i class="fas fa-minus mr-2"></i> Remove</button>
-                        <button id="refresh-button" class="btn btn-secondary"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Warehouse View Section -->
-            <div class="section-container">
-                <h2 class="section-title">Warehouse View</h2>
-                <div class="flex items-center mb-4">
-                    <label for="warehouse-select" class="form-label mr-4">Warehouse:</label>
-                    <select id="warehouse-select" class="form-select w-64">
-                        <option value="1">Warehouse 1</option>
-                        <option value="2">Warehouse 2</option>
-                        <option value="3">Warehouse 3</option>
-                        <option value="4">Warehouse 4</option>
-                        <option value="5">Warehouse 5</option>
-                    </select>
-                </div>
-                <div id="warehouse-grid" class="warehouse-grid">
-                    <!-- Warehouse cells will be generated here by JavaScript -->
                 </div>
             </div>
 
@@ -450,13 +468,14 @@
             const locationAreaIdInput = document.getElementById('location-area-id');
             const locationAreaCellInput = document.getElementById('location-area-cell');
             let isDragging = false;
+            let lastHoveredCell = null;
 
             const warehouseLayouts = {
-                '1': { rows: 6, cols: 10, occupied: [2, 5, 15, 33, 45, 50] },
-                '2': { rows: 8, cols: 12, occupied: [1, 10, 12, 24, 40, 60, 75, 90] },
-                '3': { rows: 5, cols: 8, occupied: [3, 8, 18, 25, 35] },
-                '4': { rows: 7, cols: 14, occupied: [4, 14, 28, 42, 56, 70, 84, 98] },
-                '5': { rows: 10, cols: 15, occupied: [5, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150] }
+                '1': { rows: 6, cols: 5 },
+                '2': { rows: 8, cols: 6 },
+                '3': { rows: 5, cols: 4 },
+                '4': { rows: 7, cols: 7 },
+                '5': { rows: 10, cols: 8 }
             };
 
             const renderWarehouseGrid = () => {
@@ -470,32 +489,39 @@
                 for (let i = 0; i < layout.rows * layout.cols; i++) {
                     const cell = document.createElement('div');
                     cell.classList.add('warehouse-cell');
-                    if (layout.occupied.includes(i + 1)) {
-                        cell.classList.add('occupied');
-                    }
                     cell.textContent = `WH${selectedWarehouse}-C-${i + 1}`;
                     cell.dataset.cellId = i + 1;
-
-                    cell.addEventListener('mousedown', (e) => {
-                        isDragging = true;
-                        warehouseGrid.querySelectorAll('.warehouse-cell').forEach(c => c.classList.remove('selected-by-drag'));
-                        cell.classList.add('selected-by-drag');
-                        e.preventDefault();
-                    });
-
-                    cell.addEventListener('mouseover', () => {
-                        if (isDragging) {
-                            cell.classList.add('selected-by-drag');
-                        }
-                    });
                     
                     warehouseGrid.appendChild(cell);
                 }
             };
             
+            warehouseGrid.addEventListener('mousedown', (e) => {
+                if (e.target.classList.contains('warehouse-cell')) {
+                    isDragging = true;
+                    if (!e.ctrlKey) {
+                        warehouseGrid.querySelectorAll('.warehouse-cell').forEach(c => c.classList.remove('selected-by-drag'));
+                    }
+                    e.target.classList.toggle('selected-by-drag');
+                    e.preventDefault();
+                }
+            });
+
+            // Use mousemove on the entire document for smoother tracking
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const cell = document.elementFromPoint(e.clientX, e.clientY);
+                    if (cell && cell.classList.contains('warehouse-cell') && cell !== lastHoveredCell) {
+                         cell.classList.add('selected-by-drag');
+                         lastHoveredCell = cell;
+                    }
+                }
+            });
+
             document.addEventListener('mouseup', () => {
                 if (isDragging) {
                     isDragging = false;
+                    lastHoveredCell = null;
                     const selectedCells = warehouseGrid.querySelectorAll('.warehouse-cell.selected-by-drag');
                     const selectedCellNames = Array.from(selectedCells)
                         .map(cell => cell.textContent.split('-').slice(1).join('-')) // Get C-1, C-2 etc.
