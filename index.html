@@ -245,7 +245,6 @@
                                          <input type="checkbox" id="select-all-checkbox">
                                      </th>
                                      <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
-                                     <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Request Type</th>
                                      <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">CA</th>
                                      <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vessel Call ID</th>
                                      <th class="py-2 px-3 border-b text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">BL/SN</th>
@@ -273,7 +272,6 @@
                 <div class="lg:col-span-1 flex flex-col items-center justify-center space-y-4">
                     <button id="update-button" class="btn btn-primary"><i class="fas fa-check mr-2"></i> Update</button>
                     <button id="remove-button" class="btn bg-red-500 text-white hover:bg-red-600"><i class="fas fa-minus mr-2"></i> Remove</button>
-                    <button id="refresh-button" class="btn btn-secondary"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
                 </div>
 
                 <!-- Right Column: Warehouse View -->
@@ -324,7 +322,6 @@
             // --- DYNAMIC DATA GENERATION ---
             const generateData = () => {
                 let tableContent = '';
-                const requestTypes = ['Space', 'Movement'];
                 const caTypes = ['I', 'E'];
                 const agents = ['SAIL', 'MAERSK', 'COSCO', 'MSC', 'CMA CGM'];
                 const shippers = ['MEKONG FOOD CORP...', 'GLOBAL SHIPPING LTD...', 'OCEANIC TRADERS...', 'EASTERN CARGO...', 'PACIFIC LOGISTICS...'];
@@ -332,10 +329,17 @@
                 const dgTypes = ['N', 'Y'];
 
                 for (let i = 1; i <= 100; i++) {
-                    const reqType = requestTypes[i % 2];
                     const ca = caTypes[i % 2];
                     const vesselCallId = '24BCD-V01'; // Đặt tất cả về giá trị này
-                    const blsn = `NP${String(i).padStart(2,'0')}`;
+                    
+                    // Generate BL/SN based on CA type
+                    let blsn = '';
+                    if (ca === 'I') {
+                        blsn = `BL${String(i).padStart(6, '0')}`;
+                    } else { // ca === 'E'
+                        blsn = `SN${String(i).padStart(6, '0')}`;
+                    }
+                    
                     const agent = agents[i % agents.length];
                     const shipper = shippers[i % shippers.length];
                     const planLoc = ``; // Bắt đầu với vị trí kế hoạch trống
@@ -354,7 +358,6 @@
                                 <input type="checkbox" class="data-row-checkbox">
                             </td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${i}</td>
-                            <td class="py-2 px-3 border-b text-sm text-gray-700">${reqType}</td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${ca}</td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${vesselCallId}</td>
                             <td class="py-2 px-3 border-b text-sm text-gray-700">${blsn}</td>
@@ -502,7 +505,7 @@
 
                 selectedDataRows.forEach(checkbox => {
                     const row = checkbox.closest('tr');
-                    const planLocCell = row.cells[10]; // Cột thứ 11 là Plan LOC
+                    const planLocCell = row.cells[9]; // Index updated to 9 for Plan LOC
                     if (planLocCell) {
                         planLocCell.textContent = planLocText;
                     }
@@ -531,26 +534,12 @@
 
                 selectedDataRows.forEach(checkbox => {
                     const row = checkbox.closest('tr');
-                    const planLocCell = row.cells[10]; // Cột thứ 11 là Plan LOC
+                    const planLocCell = row.cells[9]; // Index updated to 9 for Plan LOC
                     if (planLocCell) {
                         planLocCell.textContent = '';
                     }
                 });
                 isDataUpdated = true; // Đặt cờ dữ liệu đã được cập nhật
-            });
-
-            // --- REFRESH BUTTON LOGIC ---
-            const refreshButton = document.getElementById('refresh-button');
-            refreshButton.addEventListener('click', () => {
-                const allCheckboxes = document.querySelectorAll('.data-row-checkbox');
-                allCheckboxes.forEach(checkbox => {
-                    checkbox.checked = false;
-                    checkbox.closest('tr').classList.remove('selected');
-                });
-                selectAllCheckbox.checked = false;
-
-                const selectedWarehouseCells = document.querySelectorAll('.warehouse-cell.selected-by-drag');
-                selectedWarehouseCells.forEach(cell => cell.classList.remove('selected-by-drag'));
             });
 
             // --- SUBMIT BUTTON & MODAL LOGIC ---
